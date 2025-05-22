@@ -16,7 +16,7 @@ void setup() {
     M5.begin();  // Init M5Core2.  初始化 M5Core2
     // Serial2.begin(unsigned long baud, uint32_t config, int8_t rxPin, int8_t
     // txPin, bool invert)
-    Serial2.begin(115200, SERIAL_8N1, 13,
+    Serial2.begin(9600, SERIAL_8N1, 13,
                   14);  // Init serial port 2.  初始化串口2
 }
 
@@ -35,6 +35,6 @@ void loop() {
     if (Serial2.available()) {
         int ch = Serial2.read();
         Serial.write(ch);
-        M5.Lcd.printf("Serial2:%d\n", ch);
+        M5.Lcd.printf("Serial2: %d  0x%2X\n", ch, ch);
     }
 }
