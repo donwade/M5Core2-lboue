@@ -18,6 +18,9 @@ void setup() {
     // txPin, bool invert)
     Serial2.begin(9600, SERIAL_8N1, 13,
                   14);  // Init serial port 2.  初始化串口2
+
+    M5.Lcd.printf("waiting for serial on PORTC\n");
+    
 }
 
 void loop() {
@@ -27,14 +30,12 @@ void loop() {
                                  // the CH.  把串口读取到的数据复制给ch
         Serial2.write(
             ch);  // Serial port 2 Outputs the CH content.  串口2输出ch的内容
-        M5.Lcd.printf("Serial:%d\n",
-                      ch);  // The screen prints the data received by serial
-                            // port 2.  屏幕打印串口2收到的数据
+        M5.Lcd.printf("%c", ch);
     }
 
     if (Serial2.available()) {
         int ch = Serial2.read();
         Serial.write(ch);
-        M5.Lcd.printf("Serial2: %d  0x%2X\n", ch, ch);
+        M5.Lcd.printf("%c", ch);
     }
 }
