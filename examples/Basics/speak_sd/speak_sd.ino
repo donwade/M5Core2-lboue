@@ -21,6 +21,7 @@
 
 File wavFile;
 uint8_t buffer[1024];
+
 bool play{}, play_loop{true};
 
 struct __attribute__((packed)) wav_header_t {
@@ -103,8 +104,8 @@ void streaming(File& f) {
 }
 
 void setup() {
-    // LCDEnable,SDEnable,SerialEnable, I2CEnable, mbus_mode_t,SpeakerEnable
-    M5.begin(true, true, true, true, mbus_mode_t::kMBusModeOutput, true);
+    //       LCDEnable,SDEnable,SerialEnable, I2CEnable, mbus_mode_t,SpeakerEnable
+    M5.begin(true,     true,    true,         true,      mbus_mode_t::kMBusModeOutput, true);
 
     M5.Lcd.setTextColor(WHITE);
     M5.Lcd.setCursor(10, 10);
