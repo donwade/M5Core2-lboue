@@ -64,11 +64,13 @@ bool seek_file(File& f) {
     ESP_LOGI("wav", "bit_per_sample : %d"   , wheader.bit_per_sample);
 #endif
 
+
     // Check format
     // 44100 16bit mono linear PCM
     if (memcmp(wheader.RIFF, "RIFF", 4) ||
         memcmp(wheader.WAVEfmt, "WAVEfmt ", 8) || wheader.audiofmt != 1 ||
-        wheader.sample_rate != 44100 || wheader.bit_per_sample != 16 ||
+        //wheader.sample_rate != 44100 || wheader.bit_per_sample != 16 ||
+        wheader.bit_per_sample != 16 ||
         wheader.channel != 1) {
         Serial.printf("Illegal format");
         return false;
@@ -88,19 +90,47 @@ bool seek_file(File& f) {
     return true;
 }
 
-void streaming(File& f) {
+
+// Seek to the beginning of the audio data
+unsigned int get_rate(File& f) {
+    f.seek(0);
+
+    // Read header
+    wav_header_t wheader{};
+    if (f.read((uint8_t*)&wheader, sizeof(wheader)) != sizeof(wheader)) {
+        return false;
+    }
+
+#if 1
+    ESP_LOGI("wav", "RIFF           : %.4s" , wheader.RIFF          );
+    ESP_LOGI("wav", "chunk_size     : %d"   , wheader.chunk_size    );
+    ESP_LOGI("wav", "WAVEfmt        : %.8s" , wheader.WAVEfmt       );
+    ESP_LOGI("wav", "fmt_chunk_size : %d"   , wheader.fmt_chunk_size);
+    ESP_LOGI("wav", "audiofmt       : %d"   , wheader.audiofmt      );
+    ESP_LOGI("wav", "channel        : %d"   , wheader.channel       );
+    ESP_LOGI("wav", "sample_rate    : %d"   , wheader.sample_rate   );
+    ESP_LOGI("wav", "byte_per_sec   : %d"   , wheader.byte_per_sec  );
+    ESP_LOGI("wav", "block_size     : %d"   , wheader.block_size    );
+    ESP_LOGI("wav", "bit_per_sample : %d"   , wheader.bit_per_sample);
+#endif
+	return wheader.sample_rate;
+}
+
+bool streaming(File& f) {
     // No more read
     if (!f.available()) {
         // rewind to top (playback loop)
-        if (play_loop) {
-            seek_file(f);
-        }
-        return;
+        //if (play_loop) {
+        //    seek_file(f);
+        //}
+        return false;  // no more to play
     }
+	
     // Read and play
     auto readed = f.read(buffer, sizeof(buffer));
     // I2S write is blocking until the end of write
     M5.Spk.PlaySound(buffer, readed);
+	return true; // maybe more to play
 }
 
 void setup() {
@@ -121,8 +151,12 @@ void setup() {
         }
     }
 
+	unsigned int rate = get_rate(wavFile);
+    M5.Spk.InitI2SSpeakOrMic(MODE_SPK, rate);
+
     play = seek_file(wavFile);
     if (!play) {
+        M5.Lcd.clear(TFT_GREEN);
         M5.Lcd.setCursor(10, 10);
         M5.Lcd.printf("Illegal format");
     }
@@ -131,13 +165,20 @@ void setup() {
 
 void loop() {
     if (play) {
-        streaming(wavFile);
-
+        if (! streaming(wavFile))
+		{	
+			M5.Lcd.clear(TFT_BLUE);
+			M5.Lcd.setCursor(10, 10);
+			M5.Lcd.printf("You are done");
+			delay(-1);
+        }
+/*
         auto pos = M5.Touch.getPressPoint();
         if (pos.x >= 0 && pos.x < M5.Lcd.width() && pos.y >= 0 &&
             pos.y < M5.Lcd.height()) {
             Serial.println("Repeat");
             seek_file(wavFile);
         }
+*/        
     }
 }

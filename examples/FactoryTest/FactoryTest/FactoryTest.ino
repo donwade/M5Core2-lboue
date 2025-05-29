@@ -3,7 +3,7 @@
     Please note the selection of your device on line 15 of the programs!
 */
 
-bool Device = 1;  // Please select your device
+bool Device = 0;  // Please select your device
                   // Core2 = 1,Core2_AWS = 0;
 
 #include <ArduinoECCX08.h>
@@ -20,7 +20,7 @@ bool Device = 1;  // Please select your device
 
 #define LEDS_PIN 25
 #define LEDS_NUM 10
-CRGB ledsBuff[LEDS_NUM];
+CRGB ledsBuff[LEDS_NUM]; 
 
 ECCX08Class myECCX08(Wire1, 0x35);
 
