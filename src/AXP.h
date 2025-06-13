@@ -1,8 +1,10 @@
 #ifndef __AXP_PMIC_H__
 #define __AXP_PMIC_H__
 
-#include <Wire.h>
+#include <cstdint>
+
 #include <Arduino.h>
+#include <Wire.h>
 
 #include "AXP192.h"
 #include "AXP2101.h"
