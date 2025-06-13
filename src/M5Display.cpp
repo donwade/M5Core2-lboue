@@ -560,6 +560,7 @@ void M5Display::drawPngFile(fs::FS &fs, const char *path, uint16_t x,
     pngle_destroy(pngle);
     file.close();
 }
+#include <WiFi.h>
 
 void M5Display::drawPngUrl(const char *url, uint16_t x, uint16_t y,
                            uint16_t maxWidth, uint16_t maxHeight, uint16_t offX,
