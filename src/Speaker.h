@@ -24,7 +24,7 @@ enum pmic_t { pmic_unknown = 0, pmic_axp192, pmic_axp2101 };
 class Speaker {
    public:
     void begin(void);
-    bool InitI2SSpeakOrMic(int mode);
+    bool InitI2SSpeakOrMic(int mode, unsigned int rate = 44100);
     // Plays the given amount of bytes from the given data array and returns the
     // amount of bytes, that were actually played by the speaker.
     size_t PlaySound(const unsigned char* data, const size_t& amount_of_bytes);

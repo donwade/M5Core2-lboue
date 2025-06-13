@@ -1,6 +1,6 @@
 #include "Speaker.h"
 
-bool Speaker::InitI2SSpeakOrMic(int mode) {  // Init I2S.  初始化I2S
+bool Speaker::InitI2SSpeakOrMic(int mode, unsigned int rate) {  // Init I2S.  初始化I2S
     esp_err_t err = ESP_OK;
 
     i2s_driver_uninstall(
@@ -8,7 +8,7 @@ bool Speaker::InitI2SSpeakOrMic(int mode) {  // Init I2S.  初始化I2S
     i2s_config_t i2s_config = {
         .mode = (i2s_mode_t)(I2S_MODE_MASTER),  // Set the I2S operating mode.
                                                 // 设置I2S工作模式
-        .sample_rate = 44100,  // Set the I2S sampling rate.  设置I2S采样率
+        .sample_rate = rate,  // Set the I2S sampling rate.  设置I2S采样率
         .bits_per_sample =
             I2S_BITS_PER_SAMPLE_16BIT,  // Fixed 12-bit stereo MSB.
         // 固定为12位立体声MSB
@@ -59,7 +59,7 @@ bool Speaker::InitI2SSpeakOrMic(int mode) {  // Init I2S.  初始化I2S
         i2s_set_pin(Speak_I2S_NUMBER,
                     &tx_pin_config);  // Set the I2S pin number. 设置I2S引脚编号
     err += i2s_set_clk(
-        Speak_I2S_NUMBER, 44100, I2S_BITS_PER_SAMPLE_16BIT,
+        Speak_I2S_NUMBER, rate, I2S_BITS_PER_SAMPLE_16BIT,
         I2S_CHANNEL_MONO);  // Set the clock and bitwidth used by I2S Rx and Tx.
                             // 设置I2S RX、Tx使用的时钟和位宽
     return true;
