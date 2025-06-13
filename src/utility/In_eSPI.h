@@ -21,6 +21,8 @@
 
 // Include header file that defines the fonts loaded, the TFT drivers
 // available and the pins to be used
+
+#include "hal/gpio_ll.h" // GPIO register functions
 #include "In_eSPI_Setup.h"
 
 #ifndef TAB_COLOUR
