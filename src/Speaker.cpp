@@ -28,7 +28,7 @@ bool Speaker::InitI2SSpeakOrMic(int mode, unsigned int rate) {  // Init I2S.  åˆ
         .use_apll           = false,
         .tx_desc_auto_clear = true,
         .fixed_mclk         = -1,
-        .mclk_multiple      = I2S_MCLK_MULTIPLE_DEFAULT,
+        .mclk_multiple      = I2S_MCLK_MULTIPLE_768, //I2S_MCLK_MULTIPLE_DEFAULT,
         .bits_per_chan      = I2S_BITS_PER_CHAN_DEFAULT,
     };
     if (mode == MODE_MIC) {
