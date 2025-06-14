@@ -17,6 +17,7 @@ the
 
 #include "In_eSPI.h"
 
+
 typedef enum {
     JPEG_DIV_ESPRITE_NONE,
     JPEG_DIV_ESPRITE_2,
